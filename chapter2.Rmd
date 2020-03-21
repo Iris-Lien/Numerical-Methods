@@ -102,7 +102,9 @@ matrix(c(0,0,7,2,5,0,3,0,0),3,3)
 ```
 
 ## Question 3
-Suppose vec is a vector of length 2. Interpreting vec as the coordinates ofa point in ($R^{2}$), use R to express it in polar coordinates. You will need (at least one of) the inverse trigonometric functions: acos(x), asin(x), and atan(x).  
+Suppose vec is a vector of length 2. Interpreting vec as the coordinates ofa point in ($R^{2}$), 
+use R to express it in polar coordinates. You will need (at least one of) the inverse trigonometric functions: 
+acos(x), asin(x), and atan(x).  
 
 
 ```{r}
