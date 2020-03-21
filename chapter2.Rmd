@@ -16,8 +16,7 @@ Give R assignment statements that set the variable z to
    (a). $x^{a^{b}}$  
    (b). $(x^{a})^b$  
    (c). $3x^{3}+2x^{2}+6x+1$ (try to minimise the number of operations required)  
-   (d). the digit in the second decimal place of x (hint: use floor(x) and/or
-%%)  
+   (d). the digit in the second decimal place of x (hint: use floor(x) and/or %%)  
    (e). z + 1
 ```{r sqare}
 #1a
@@ -147,8 +146,7 @@ Using R expressions update the supermarket queue as successively:
   (d). Barry gets impatient and leaves;  
   (e). Alison gets impatient and leaves.  
   
-  For the last case you should not assume that you know where in the queue
-Alison is standing.  
+  For the last case you should not assume that you know where in the queue Alison is standing.  
   Finally, using the function which(x), find the position of Russell in the queue.  
   Note that when assigning a text string to a variable, it needs to be in quotes.  
   We formally introduce text in Section 4.1.
