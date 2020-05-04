@@ -1,0 +1,195 @@
+---
+title: "Chpater 5 Exercises"
+author: "Iris"
+date: "2020/4/26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Question 3
+
+In this question we simulate the rolling of a die.  
+To do this we use the function runif(1), which returns a ‘random’ number in the range (0,1).  
+To get a random integer in the range {1, 2, 3, 4, 5, 6}, we use ceiling(6*runif(1)), or if you prefer, sample(1:6,size=1) will do the same job.  
+
+(a).  
+Suppose that you are playing the gambling game of the Chevalier de M´er´e.  
+That is, you are betting that you get at least one six in 4 throws of a die.  
+Write a program that simulates one round of this game and prints out whether you win or lose.  
+Check that your program can produce a different result each time you run it.
+
+```{r}
+#a
+x <- seq(1:4)  #將x隨意放入數字,此為{1,2,3,4}
+flag <- 0  #歸零,以下將用來表示成功與否
+for(i in seq(1:4))  #擲骰子4次
+  x[i] <- sample(1:6,size=1)  #將每次的值,按照順序存入x中
+print(x)  #將骰子結果輸出
+for(i in range(1:4))  #從第一個骰子的值開始,一一確認是否=6
+  if(x[i]==6)  #若為6
+    flag <- flag + 1  #則將紀錄成功次數+1
+if(flag>=1)  #表示有成功
+  {print("win")}  #顯示win
+if(flag == 0)  #成功次數=0,表示失敗
+  {print("lose")} #顯示lose
+```
+
+(b).  
+Turn the program that you wrote in part (a) into a function sixes,  
+which returns TRUE if you obtain at least one six in n rolls of a fair die,and returns FALSE otherwise.  
+That is, the argument is the number of rolls n,  
+and the value returned is TRUE if you get at least one six and  FALSE otherwise.
+How would you give n the default value of 4?
+
+```{r}
+#b
+x <- seq(1:4)
+flag <- 0
+sixes <- function(n) {
+  for(i in seq(1:n))
+  {
+    x[i] <- sample(1:6,size=1)
+    if(x[i]==6) 
+      flag <- flag + 1
+  }
+  print(x)
+  if(flag >= 1)
+    {return(TRUE)}  #成功回傳TRUE
+  else
+    {return(FALSE)}  #失敗回傳FALSE
+}
+print(sixes(4))  #輸出擲骰子4次的結果
+```
+
+
+(c).  
+Now write a program that uses your function sixes from part (b),  
+to simulate N plays of the game (each time you bet that you get at least 1 six in n rolls of a fair die).  
+Your program should then determine the proportion of times you win the bet.  
+This proportion is an estimate of the probability of getting at least one 6 in n rolls of a fair die.  
+Run the program for n = 4 and N = 100, 1000, and 10000, conducting several runs for each N value.  
+How does the variability of your results depend on N?  
+The probability of getting no 6’s in n rolls of a fair die is (5/6)n,  
+so the probability of getting at least one is 1 − (5/6)n.  
+Modify your program so that it calculates the theoretical probability as well as the simulation estimate and prints the different.
+
+```{r}
+#begin with (b)
+x <- seq(1:4)
+flag <- 0
+sixes <- function(n) {
+  for(i in seq(1:n))
+  {
+    x[i] <- sample(1:6,size=1)
+    if(x[i]==6) 
+      flag <- flag + 1
+  }
+  if(flag >= 1)
+    {return(TRUE)}
+  else
+    {return(FALSE)}
+}#end with (b)
+
+t <- 0  #歸零,紀錄成功次數
+N <- 100 #or 1000 or 10000
+for(j in seq(1:N))  #計算1-N局,每局擲骰子4次
+{
+  if(sixes(4)==TRUE)  #若有1局成功
+    {t <- t + 1}  #紀錄成功次數+1
+}
+p <- t/N  #總成功數/總局數計算=成功機率
+print(p) #輸出成功機率
+
+th <- 1-(5/6)^4  #理論值
+print(abs(p-th))  #實驗-理論相差多少
+
+```
+
+(d).  
+Write a program to write the result of all N runs to a textfile 'sixes_sim.txt', with the result of each run on a separate line.  
+Now write another program to read the textfile sixes_sim.txt and again determine the proportion of bets won.
+
+```{r}
+#begin with (b)
+x <- seq(1:4)
+flag <- 0
+sixes <- function(n) {
+  for(i in seq(1:n))
+  {
+    x[i] <- sample(1:6,size=1)
+    if(x[i]==6) 
+      flag <- flag + 1
+  }
+  print(x)
+  if(flag >= 1)
+    {return(TRUE)}
+  else
+    {return(FALSE)}
+}#end with (b)
+
+N <- 100 #or 1000 or 10000(局)遊戲
+r <- logical(N) #將布林值處存至r
+for(j in seq(1:N))  #將N局,每局投擲4次骰子結果紀錄
+  r[j] <- sixes(4)
+
+write(r, file="sixes_sim.txt",sep="\n") #紀錄實驗結果
+result <- read.table("sixes_sim.txt") #讀取實驗結果
+
+t <- 0 #歸零,用來紀錄贏的次數
+for(j in seq(1:N))  #計算贏的比例
+  if(result[j, 1]==TRUE)
+    {t <- t + 1}
+print(t/N) #輸出贏的比例
+
+```
+
+
+## Question 5
+For r ∈ [0, 4], the logistic map of [0, 1] into [0, 1] is defined as f(x) = rx(1 − x).  
+Given a point $x_{1}$ ∈ [0, 1] the sequence given by $x_{n+1}$ = f($x_{n}$) is called the discrete dynamical system defined by f.  
+Write a function that takes as parameters $x_{n+1}$, r, and n, generates the first n terms of the discrete dynamical system above, and then plots them.  
+The logistic map is a simple model for population growth subject to resource constraints:  
+if $x_{n}$ is the population size at year n, then $x_{n+1}$ is the size at year n+1.  
+Type up your code, then see how the system evolves for different starting values $x_{1}$ and different values of r.  
+
+```{r}
+logistic_map <- function(r, x, n){
+  temp <- numeric(n) #將n個點存至temp
+  temp[1] <- x #令temp第一個值,也就是起始值為1(題目所述)
+  for(i in c(2:n)) #從temp中2至n的位置存入計算後的值
+    temp[i] <- r*temp[i-1]*(1-temp[i-1])
+  return(temp) #回傳所有存至temp中的值
+}
+value_r <- 2.9 #設1-4的數
+value_x <- 0.5 #設0-1的數
+value_n <- 500 #取500個點作圖
+result <- logistic_map(value_r, value_x, value_n) #帶入上述logistic_map函數計算y點
+plot(c(1:value_n), result, type="p", xlab="n", ylab="x[n]") #作圖
+
+```
+
+## Question 7
+The number of ways you can choose r things from a set of n, ignoring the order in which they are chosen, is $\binom{n}{r}$ = n!/(r!(n − r)!).  
+Let x be the first element of the set of n things.  
+We can partition the collection of possible size r subsets into those that contain x and those that don’t:  
+there must be $\binom{n-1}{r-1}$ subsets of the first type a $\binom{n-1}{r}$ subsets of the second type.  
+Thus, $\binom{n}{r}$ = $\binom{n-1}{r-1}$ $\binom{n-1}{r}$.  
+Using this and the fact $\binom{n}{n}$ = $\binom{n}{0}$ = 1, write a recursive function to calculate $\binom{n}{r}$.
+
+```{r}
+#recursive function:
+nfact <- function(num) {  #做階乘運算
+	if (num == 1) {return(1)}  #num=1時跳出,完成遞迴
+ 	else {return(num*nfact(num-1))}  #回傳num*(num-1)!
+ }
+n <- 6 #代任意整數或換成輸入
+r <- 4 #代任意整數或換成輸入
+print(nfact(n)/nfact(r)/nfact(n-r)) #輸出C n取r結果
+
+```
+
+End of chpater 5 exercises.

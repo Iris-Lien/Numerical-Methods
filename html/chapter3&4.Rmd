@@ -1,0 +1,337 @@
+---
+title: "Chapter 3 & 4 Exercises"
+author: "C組  連昱婷、劉心雨、莊芸綺"
+date: "2020/4/7"
+output: 
+  html_document:  default
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter 3
+
+## Question 1
+Supposing that you are given x, write an R expression for y using if statements.  
+Add your expression for y to the following program, then run it to plot the function f.  
+
+```{r}
+x.values <- seq(-2, 2, by = 0.1)
+# for each x calculate y
+n <- length(x.values)
+y.values <- rep(0, n)
+for (i in 1:n) {
+  #x <- x.values[i]
+  if(x.values[i] <= 0){
+    y <- -x.values[i]^3
+  }
+  else if((x.values[i] > 0)&(x.values[i] <= 1)){
+    y <- x.values[i]^2
+  }
+  else{
+    y <- sqrt(x.values[i])
+  }
+  y.values[i] <- y
+}
+# output
+plot(x.values, y.values, type = "l")
+
+```
+
+## Question 2
+Let $h(x, n) = 1+x+x^{2}+...+x^{n} = \sum_{i=0}^{n}x^{i}$.  
+Write an R program to calculate $h(x, n)$ using a for loop.  
+
+```{r}
+x <- 6.6
+n <- 8
+sum <- 0
+
+
+for(i in 1:n)
+{
+  sum <- sum + x^i
+  #i <- i+1
+}
+print(sum)
+```
+
+## Question 3
+The function $h(x, n)$ from Exercise 2 is the finite sum of a geometric sequence.  
+It has the following explicit formula, for $x \neq  1$.  
+$h(x,n)=\frac{1-x^{n+1}}{1-x}$  
+Test your program from Exercise 2 against this formula using the following
+values.
+
+```{r}
+x <- 6.6
+n <- 8
+sum <- 0
+i <- 0
+
+while(i!=n+1)
+{
+  sum <- sum + x^i
+  i <- i+1
+}
+print(sum)
+
+h <- (1-x^(n+1))/(1-x)
+print(h)
+```
+
+
+## Question 4
+First write a program that achieves the same result as in Exercise 2 but
+using a while loop.  
+Then write a program that does this using vector operations (and no loops).
+
+```{r}
+x <- 6.6
+n <- 8
+sum <- 0
+i <- 0
+
+while(i!=n+1)
+{
+  sum <- sum + x^i
+  i <- i+1
+}
+print(sum)
+```
+
+
+## Question 5
+To rotate a vector $(x, y)^{T}$ anticlockwise by $\theta$ radians, you premultiply it by the matrix.  
+
+```{r}
+theta <- pi/2  #let theta = 90 degree
+x <- matrix(c(1,0),2,1)  #設一個2x1的矩陣為1,0
+print(x)  #輸出矩陣
+a <- floor(cos(theta))  #利用floor取底函數取出cos(pi/2)最近的值,存入a
+b <- sin(theta)  #將sin(pi/2)值存入b
+m <- matrix(c(a,b,-b,a),2,2)  #將旋轉矩陣存入m
+#print(m)
+print(m%*%x)  #矩陣相乘,求得結果
+
+```
+
+
+## Question 6
+Check that if the $x_{i}$ are all positive, the harmonic
+mean is always less than or equal to the geometric mean,  
+which is always less than or equal to the arithmetic mean.
+
+```{r}
+Geomatric_Mean <- function(n){
+  x <- seq(1:10)
+  #print(x)
+  sum <- x[1]
+  for(i in 2:n){
+    sum <- sum * x[i]
+  }
+  return(sum^(1/n))
+}
+
+Harmonic_Mean <- function(m){
+  x <- seq(1:10)
+  sum <- 1/x[1]
+  for(j in 2:m){
+    sum <- sum + 1/x[j]
+  }
+  return(m/sum)
+}
+
+Arithmetic_Mean <- function(a){
+  
+  x <- seq(1:10)
+  sum <- x[1]
+  for(k in 2:a){
+    sum <- sum + x[a]
+  }
+  return(sum/a)
+}
+
+value <- 5  #scan()
+
+print(Geomatric_Mean(value))
+print(Harmonic_Mean(value))
+print(Arithmetic_Mean(value))
+```
+
+
+## Question 7
+How would you find the sum of every third element of a vector x?
+```{r}
+x <- seq(1,10)  #將x設為1-10數列,依序存入
+sum <- 0  #歸零,用來紀錄總和
+print(x)  #先將x輸出,觀察數列以便檢查底下有無計算錯誤
+for(i in 1:10)  #從第一個位置開始檢查
+{
+  if(i %% 3 == 0)  #若位置為3的倍數
+    {sum <- sum + x[i]}  #做加總
+}
+print(sum)  #輸出加總後的結果
+```
+
+## Question 10
+Write a program that uses a loop to find the minimum of a vector x, without
+using any predefined functions like min(...) or sort(...).  
+You will need to define a variable, x.min say, in which to keep the smallest value you have yet seen.  
+Start by assigning x.min <- x[1] then use
+a for loop to compare x.min with x[2], x[3], etc.  
+If/when you find
+x[i] < x.min, update the value of x.min accordingly. 
+
+```{r}
+#利用迴圈找最小值
+x<-c(3,1,6,7,0,4)  #隨意給定x值,此為{3,1,6,7,0,4},6個數字
+x.min<-x[1]  #先將x第一個位置的值=3設為最小值
+for(i in 2:6)  #從第一個位置檢查到第六個位置
+{
+  if(x[i]<x.min)  #若第i個位置的值小於目前最小值
+    x.min<-x[i]  #讓最小值變為第i位置的值
+}
+print(x.min)  #輸出最小值
+```
+
+## Question 12
+The game of craps is played as follows. First, you roll two six-sided dice; let x be the sum of the dice on the first roll.    
+If x = 7 or 11 you win, otherwise you keep rolling until either you get x again, in which case you also win,  
+or until you get a 7 or 11, in which case you lose.      
+Write a program to simulate a game of craps.You can use the following snippet of code to simulate the roll of two (fair) dice:   
+x <- sum(ceiling(6*runif(2)))
+
+```{r}
+rm(list = ls())  
+x <- sum(ceiling(6*runif(2)))
+n <- x
+if (x == 7 || x == 11)
+{print("you are win.")} else {
+  while(TRUE)
+  {
+    x <- sum(ceiling(6*runif(2)))
+    
+    if(x == n)
+    {
+      print("you are win.")
+      break
+    }
+    if(x == 7 || x == 11)
+    {
+      print("you are lose.")
+      break
+    }
+  }
+}
+
+```
+
+
+## Question 13
+Suppose that $(x(t),y(t))$ has polar coordinate $(\sqrt{t},s\pi t)$.  
+Plot $(x(t), y(t))$ for $t ∈ [0, 10]$.  
+
+使用題目的資訊，畫出極座標以xy坐標表現出來的圖形  
+一開始先決定t的範圍，後來以極座標的定義，$讓r = \sqrt{t}$ 且令Q為角度 = $s\pi t$.            又知道極坐標與xy座標之間的換算，可以得知$x = rcos(θ)$,$y = rsin(θ)$       再以plot畫出x軸範圍為-3到3與y軸-3到3的xy座標軸，之後再用lines畫出下面顯示出圖形    
+
+```{r}
+rm(list = ls())
+t <- seq(0,10,by = 0.01)
+r <- sqrt(t)
+Q <- 2*pi*t
+x <- r*cos(Q)
+y <- r*sin(Q)
+plot(c(-3:3),c(-3:3),type="n",xlab="x",ylab="y")
+lines(x,y)
+```
+
+
+
+
+
+End of chpater 3 exercises.  
+
+## Chapter 4
+
+## Question 1
+```{r}
+ID <- seq(1:10)
+Age <- seq(from=18,to=9)
+NumTeeth <- seq(from = 32, to = 23)
+
+
+#write(teeth, file = "teeth.txt", ncolumns=1)
+#print(read.table("teeth.txt"))
+#Age <- read.table("teeth.txt")
+
+#write(age, file = "age.txt", ncolumns=1)
+#Teeth <- read.table("age.txt")
+#print(read.table("age.txt"))
+
+print(data.frame(ID,Age,NumTeeth))
+
+```
+
+## Question 2
+The function $order(x)$ returns a permutation of $1:length(x)$ giving the order of the elements of x.
+
+```{r}
+#x <- c(ID,Age,NumTeeth)
+#y <- order(x==Age)
+print(Age)
+```
+
+## Question 3
+Devise a program that outputs a table of squares and cubes of the numbers 1 to n. For n <- 7 the output should be as follows:
+
+```{r}
+number<-c(1:7)  #將number設為{1,2,3,4,5,6,7}
+square<-number^2  #將number所有數字作平方,存入square
+cube<-number^3  #將number所有數字作三次方,存入cube
+print(data.frame(number,square,cube))  #將結果依格式函數data.frame()輸出
+
+```
+
+## Question 4
+Write an R program that prints out the standard multiplication table:
+
+```{r}
+m1 = matrix(1:9, nrow=9, byrow=TRUE)  #將{1,2,3,4,5,6,7,8,9}存入m1矩陣(9行)
+m2 = matrix(1:9, nrow=1, byrow=TRUE)  #將{1,2,3,4,5,6,7,8,9}存入m2矩陣(9列)
+print(m1%*%m2) #m1&m2矩陣相乘即可得出乘法表
+```
+
+## Question 5
+Use R to plot the hyperbola $x^{2}$ − $\frac{y^{2}}{3}$ = 1
+```{r}
+ x <- seq(1,5, by = 0.01)
+ y.upper <-  sqrt(3*x^2-3)
+ y.lower <- -sqrt(3*x^2-3)
+ x.max <- max(x)
+ y.max <- sqrt(3)*x.max
+ x.min <- -x.max
+ y.min <- -y.max
+ par(pty = "s")
+ plot(c(x.min,x.max), c(y.min,y.max), type = "n", xlab = "x", ylab = "y")
+ 
+ lines(x, y.upper)
+ lines(x, y.lower)
+ lines(-x, y.upper)
+ lines(-x, y.lower)
+ 
+ segments(x.min,y.min,x.max,y.max)
+ segments(x.min,y.max,x.max,y.min)
+ 
+ points(2, 0)
+ points(-2, 0)
+ text(2, 0, "focus (2, 0)", pos = 4)
+ text(x.max,y.max, "asymptote y = sqrt(3)*x", pos  = 2)
+ title("The hyperbola x^2-y^2/3 = 1")
+ 
+```
+
+End of chpater 4 exercises.
+

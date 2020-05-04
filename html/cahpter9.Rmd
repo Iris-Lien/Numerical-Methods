@@ -1,0 +1,65 @@
+---
+title: "Chapter 9 Exercises"
+author: "Iris"
+date: "2020/4/26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+In single precision four bytes are used to represent a floating point number:  
+1 bit is used for the sign, 8 for the exponent, and 23 for the mantissa.  
+What are the largest and smallest non-zero positive numbers in single precision (including denormalised numbers)?  
+In base 10, how many significant digits do you get using single precision?  
+
+```{r}
+
+```
+
+## Question 2
+
+What is the relative error in approximating π by 22/7?  
+What about 355/113?  
+```{r}
+n <- 22/7
+error <- abs(n-pi)/n
+print(error)
+
+m <- 355/113
+error <- abs(m-pi)/m
+print(error)
+```
+
+## Question 5
+
+Show that the second formula is more efficient (requires fewer operations) but can suffer from catastrophic cancellation.  
+Demonstrate catastrophic cancellation with an example sample of size n = 2.
+```{r}
+
+```
+
+
+## Question 6
+Horner’s algorithm for evaluating the polynomial p(x) = $a_{0} + a_{1}x+ a_{0}x_{2} +· · · + a_{n}x_{n}$  
+consists of re-expressing it as $a_{0}+x(a_{1}+x(a_{2}+· · ·+x(a_{n-1}+a_{n})· · ·))$  
+How many operations are required to evaluate p(x) in each form?
+```{r}
+
+```
+
+## Question 8
+Use the system.time function to compare the programs primedensity.r
+and primesieve.r, given in Chapter 5.
+
+```{r}
+system.time(source("primedensity.r"))
+system.time(source("primesieve.r"))
+```
+
+
+
+End of chapter 9 exercises.

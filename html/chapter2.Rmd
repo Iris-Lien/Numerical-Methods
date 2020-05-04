@@ -1,0 +1,235 @@
+---
+title: "Chapter 2 Exercises"
+author: "C組  連昱婷、劉心雨、莊芸綺"
+date: "2020/3/20"
+output: 
+  html_document:  default
+    
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+Give R assignment statements that set the variable z to  
+   (a). $x^{a^{b}}$  
+   (b). $(x^{a})^b$  
+   (c). $3x^{3}+2x^{2}+6x+1$ (try to minimise the number of operations required)  
+   (d). the digit in the second decimal place of x (hint: use floor(x) and/or %%)  
+   (e). z + 1
+```{r sqare}
+#1a
+b<-2  #將2存入b
+a<-3  #將3存入a
+x<-2.25  #將2.25存入x
+z<-x^(a^b)  #將計算後的值存入Z
+print(z)  #輸出z的結果
+```
+   
+```{r square}
+#1b
+b<-2
+a<-3
+x<-2.25
+z<-(x^a)^b
+print(z)
+```
+
+```{r}
+#1c
+x<-2.25
+z<-x*(x*(3*x+2)+6)+1  #6 operations
+print(z)
+```
+
+```{r}
+#1d
+#floor(z)=58,取到整數位
+#(z-floor(z))=0.796875,得到小數位
+z<-floor((z-floor(z))*100)%%10  #利用題目所給函數計算出z的"小數點後第二位"的值
+print(z)
+```
+
+```{r}
+#1e
+z<-z+1  #將z+1後的值存回z,所以z現在的值為z+1
+print(z)
+```
+
+
+## Question 2
+Give R expressions that return the following matrices and vectors  
+  (a). (1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1)  
+  (b). (1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5)  
+  (c). $$
+ \begin{pmatrix}
+  0 &1 &1\\ 
+  1 &0 &1 \\ 
+  1 &1 &0
+\end{pmatrix}$$  
+  (d).$$
+ \begin{pmatrix}
+   0 & 2 & 3 \\
+   0 & 5 & 0 \\
+   7 & 0 & 0
+  \end{pmatrix}$$
+  
+```{r}
+#2a
+print(c(1:8,7:1))  #c(1到8,7到1)
+```
+  
+```{r}
+#2b
+print(rep(1:5,1:5))  #rep(1到5,重覆1到5次)
+```
+
+```{r}
+#2c
+A<-matrix(1,3,3)  #數值為1的3x3矩陣,存入A
+B<-diag(3)  #正對角為1的矩陣,存入B
+print(A-B)
+```
+
+```{r}
+#2d
+print(matrix(c(0,0,7,2,5,0,3,0,0),3,3))  #輸出數值為{0,0,7,2,5,0,3,0,0}的3x3矩陣
+```
+
+## Question 3
+Suppose vec is a vector of length 2. Interpreting vec as the coordinates ofa point in ($R^{2}$), use R to express it in polar coordinates.  
+You will need (at least one of) the inverse trigonometric functions: 
+acos(x), asin(x), and atan(x).  
+
+
+```{r}
+#3轉極座標
+vec<-c(sqrt(2),sqrt(2))  #因題目所述向量長度為2
+radius<-sqrt(vec[1]^2+vec[2]^2)  #向量兩點距離為極座標半徑r
+print(radius)  #輸出半徑
+
+x<-vec[1]  #將向量第一個點存入x
+y<-vec[2]  #將向量第一個點存入y
+radian<-atan(y/x)  #計算arctan,即為弧度
+deg<-radian*180/pi  #將弧度轉角度
+print(deg)  #輸出角度
+
+cat(c("polar coordinates:","(",radius,",",deg,")"))  #cat()函數為輸出,與print()不同地方為不會顯示""符號
+
+
+```
+
+
+
+## Question 4
+Use R to produce a vector containing all integers from 1 to 100 that are
+not divisible by 2, 3, or 7.  
+
+```{r}
+#4
+x<-1:100  #將1-100數列存入x
+print(x[(x%%2!=0)&(x%%3!=0)&(x%%7!=0)])  #若對2取餘數不等於0->不會被整除,以此類推,&符號為且
+
+```
+
+
+## Question 5
+Suppose that queue <- c("Steve", "Russell", "Alison", "Liam")
+and that queue represents a supermarket queue with Steve first in line.  
+Using R expressions update the supermarket queue as successively:  
+  (a). Barry arrives;  
+  (b). Steve is served;  
+  (c). Pam talks her way to the front with one item;  
+  (d). Barry gets impatient and leaves;  
+  (e). Alison gets impatient and leaves.  
+  
+  For the last case you should not assume that you know where in the queue Alison is standing.  
+  Finally, using the function which(x), find the position of Russell in the queue.  
+  Note that when assigning a text string to a variable, it needs to be in quotes.  
+  We formally introduce text in Section 4.1.
+
+
+```{r}
+#5a:Barry arrives
+queue<-c("Steve","Russell","Alison","Liam")  #將這四人依序存進queue
+queue<-c(queue,"Barry")  #將原先queue裡的人在後面多加Barry,再存入queue
+cat(queue)  #將queue印出,cat()函數說明在第三題程式碼中最後一行
+```
+
+```{r}
+#5b:Steve leaves
+queue<-queue[queue!= "Steve"]  #將queue裡的人扣除Steve,再存入queue
+cat(queue)  #將queue印出
+```
+
+```{r}
+#5c:Pam arrives
+queue<-c("Pam",queue)  #將Pam存入queue之前,再存入queue
+cat(queue)  #將queue印出
+```
+
+```{r}
+#5d:Barry leaves
+queue<-queue[queue!= "Barry"]  #將queue裡的人扣除Steve,再存入queue
+cat(queue)  #將queue印出
+```
+
+```{r}
+#5e:Alison leaves
+queue<-queue[queue!= "Alison"]  #將queue中第三個位置的Alison扣除,再存入queue
+cat(queue)  #將queue印出
+which(queue=="Russell")  #which()函數可以尋找後面括弧中條件符合的位置
+```
+
+## Question 6
+Which of the following assignments will be successful?  
+What will the vectors x, y, and z look like at each stage?  
+rm(list = ls())  
+x <- 1  
+x[3] <- 3  
+y <- c()  
+y[2] <- 2  
+y[3] <- y[1]  
+y[2] <- y[4]  
+z[1] <- 0
+
+```{r}
+#題目敘述
+rm(list = ls()) #清空工作欄 
+x <- 1  #建構x是一個/一串數字
+x[3] <- 3   #將3存入x第3個位置
+y <- c()  #建構y是一個向量,裡面並無數值
+y[2] <- 2   #將2存入y第2個位置
+y[3] <- y[1]  #將y第1個位置的值存入y第3個位置
+y[2] <- y[4]  #將y第4個位置的值存入y第2個位置
+#z[1] <- 0  會產生Error,因為前面並沒有建構z是數列、向量或是任何東西,所以直接將0存入z的第一個位置,並不會將0存入
+```
+
+```{r}
+#顯示每一步變數變化
+rm(list = ls()) #removes all objects in the workspace 
+x <- 1
+print(x)
+x[3] <- 3 
+print(x)
+
+y <- c()  
+print(y)
+y[2] <- 2
+print(y)
+y[3] <- y[1]
+print(y)
+y[2] <- y[4]  
+print(y)
+
+z <- c()  #建構z是一個向量,裡面並無數值
+print(z)
+z[1] <- 0  #再將0存入z的第一個位置
+print(z)
+```
+
+End of chpater 2 exercises.
+
+
