@@ -1,0 +1,117 @@
+---
+title: "Chapter 11 Exercises"
+author: "C組 連昱婷、劉心雨、莊芸綺"
+date: "2020/5/15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 3
+
+The standard normal distribution function is given by
+$\Phi(z)=\int_{- \infty}^{z} \frac{1}{\sqrt{2\pi}}e^{-x^{2}/2} dx$  
+For $p ∈ [0, 1]$, the 100p standard normal percentage point is defined as that $z_{p}$ for which $\Phi(z_{p})=p$.  
+Using the function $Phi(z)$ from Example 11.2.1, calculate $z_{p}$ for $p = 0.5, 0.95, 0.975,$ and $0.99.$  
+
+```{r}
+rm(list = ls()) # clear the workspace
+source("D:/Numerical Methods/source/simpson_n.r")
+
+phi <- function(x) return(exp(-x^2/2)/sqrt(2*pi))
+
+Phi <- function(z) {
+if (z < 0) {
+  return(0.5 - simpson_n(phi, z, 0))
+  } else {
+  return(0.5 + simpson_n(phi, 0, z))
+  }
+}
+
+simpson_n(Phi, 0, 1, 100*0.5)
+simpson_n(Phi, 0, 1, 100*0.95)
+simpson_n(Phi, 0, 1, 100*0.975)
+simpson_n(Phi, 0, 1, 100*0.99)
+
+
+```
+
+
+
+## Question 4
+Consider $I=\int_{0}^{1}\frac{3}{2}\sqrt{x}dx=1$  
+Let $T_{n}$ be the approximation to $I$ given by the trapezoid rule with a partition of size $n$   
+and let $S_{n}$ be the approximation given by Simpson’s rule with a partition of size $n$.  
+Let $n_{T}(\epsilon )$ be the smallest value of $n$ for which $|T_{n}-I|\leq \epsilon$ and let $n_{S}(\epsilon )$ be the smallest value of $n$ for which $|S_{n}-I|\leq \epsilon$.  
+Plot $n_{T}(\epsilon )$ and $n_{S}(\epsilon )$ against $\epsilon$ for $\epsilon=2^{-k}, k=2,...,16$.
+
+```{r}
+source("D:/Numerical Methods/source/trap.r")
+options(digits = 16)
+f2 <- function(x) return((3/2)*sqrt(x))
+Tn <- trapezoid(f2, 0, 1)
+#print(Tn)
+for(i in 3:16){
+  T <- trapezoid(f2, 0, 1, n=i)
+  print(T)
+  if(T < Tn){
+    Tn <- T
+    print(Tn)
+  }
+}
+
+source("D:/Numerical Methods/source/simpson.r")
+options(digits = 16)
+f4 <- function(x) return((3/2)*sqrt(x))
+Sn <- simpson(f4, 0, 1, tol = 1/4)
+#print(Sn)
+for(i in 3:16){
+  S <- simpson(f4, 0, 1, tol = 2^(-i))
+  print(S)
+  if(S < Sn){
+    Sn <- S
+    print(Sn)
+  }
+}
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+trap <- function(ftn, a, b, tol = 1e-8, verbose = FALSE) {
+  I=1
+  T.diff <- tol + 1
+  while (S.diff > tol) {
+    h <- (b-a)/n
+    x.vec <- seq(a, b, by = h)
+    f.vec <- sapply(x.vec, ftn)
+    T <- h*(f.vec[1]/2 + sum(f.vec[2:n]) + f.vec[n+1]/2)
+    T.diff <- abs(T - I)
+}
+if (verbose) #cat('partition size', n, '\n')
+return(T)
+}
+
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+rm(list = ls()) # clear the workspace
+source("D:/Numerical Methods/source/simpson_n.r")
+ftn <- function(x) return(1/x)
+S <- function(n) simpson_n(ftn, 0.01, 1, n)
+n.vec <- seq(10, 1000, by = 10)
+S.vec <- sapply(n.vec, S)
+opar <- par(mfrow = c(1, 2), pty="s", mar=c(4,4,2,1), las=1)
+plot(n.vec, S.vec + log(0.01), type = "l",
+xlab = "n", ylab = "error")
+plot(log(n.vec), log(S.vec + log(0.01)), type = "l",
+xlab = "log(n)", ylab = "log(error)")
+par(opar)
+
+```
+
+End of chpater 11 exercises.
